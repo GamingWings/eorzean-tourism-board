@@ -45,27 +45,9 @@ export const getEndOffset = ({
   windowEndHour,
   nextWeatherPhaseIsGood,
 }) => {
-  if (windowStartHour > windowEndHour) {
-    return getEndOffsetOverMidnight({
-      phaseStartHour,
-      windowEndHour,
-      nextWeatherPhaseIsGood,
-    });
-  }
-  if (windowEndHour <= phaseStartHour + 8)
+  const adjustedWindowEndHour = windowStartHour > windowEndHour ? windowEndHour + 24 : windowEndHour;
+  if (adjustedWindowEndHour <= phaseStartHour + 8)
     return windowEndHour - phaseStartHour;
-  return (
-    (nextWeatherPhaseIsGood ? windowEndHour : phaseStartHour + 8) -
-    phaseStartHour
-  );
-};
-
-const getEndOffsetOverMidnight = ({
-  phaseStartHour,
-  windowEndHour,
-  nextWeatherPhaseIsGood,
-}) => {
-  const adjustedWindowEndHour = windowEndHour + 24
   return (
     (nextWeatherPhaseIsGood ? adjustedWindowEndHour : phaseStartHour + 8) -
     phaseStartHour
