@@ -35,6 +35,41 @@ const getTimeDisplay = (time) => {
   return `${time}AM`;
 };
 
+export const getStartOffset = ({ phaseStartHour, windowStartHour }) => {
+  return Math.max(windowStartHour - phaseStartHour, 0);
+};
+
+export const getEndOffset = ({
+  phaseStartHour,
+  windowStartHour,
+  windowEndHour,
+  nextWeatherPhaseIsGood,
+}) => {
+  if (windowStartHour > windowEndHour) {
+    return getEndOffsetOverMidnight({
+      phaseStartHour,
+      windowStartHour,
+      windowEndHour,
+      nextWeatherPhaseIsGood,
+    });
+  }
+  if (windowEndHour <= phaseStartHour + 8)
+    return windowEndHour - phaseStartHour;
+  return (
+    (nextWeatherPhaseIsGood ? windowEndHour : phaseStartHour + 8) -
+    phaseStartHour
+  );
+};
+
+const getEndOffsetOverMidnight = ({
+  phaseStartHour,
+  windowStartHour,
+  windowEndHour,
+  nextWeatherPhaseIsGood,
+}) => {
+  
+};
+
 const getWindow = ({ log, currentTime }) => {
   const eWeather = new EorzeaWeather(log.ZoneId);
   const phases = PHASES.filter((phase) => timesIntersect(phase, log.Window));
@@ -59,33 +94,28 @@ const getWindow = ({ log, currentTime }) => {
       )
     )
       continue;
-    const effectiveWindowStartTime = Math.max(
-      phase.EndTime < log.Window.StartTime // This is checking for whether the log crosses midnight into the next day
-        ? phase.StartTime
-        : log.Window.StartTime,
-      phase.StartTime
-    );
-    const baseOffset = effectiveWindowStartTime - phase.StartTime;
+    const CollectableWindowStartOffset = getStartOffset({
+      phaseStartHour: phase.StartTime,
+      windowStartHour: log.Window.StartTime,
+    });
+
     const CollectableWindowStartTime = new Date(
-      startOfWeatherWindow + ONE_HOUR * baseOffset
+      startOfWeatherWindow + CollectableWindowStartOffset * ONE_HOUR
     );
-    const nextWindowStart = (startOfWeatherWindow += EIGHT_HOURS);
-    const nextWindowIsAlsoGoodWeather = log.Weather.some(
-      (weather) => weather === eWeather.getWeather(new Date(nextWindowStart))
-    );
-    let effectiveWindowEndTime =
-      log.Window.EndTime > log.Window.StartTime
-        ? log.Window.EndTime
-        : log.Window.EndTime + 24;
-    if (
-      effectiveWindowEndTime >= phase.EndTime + 1 &&
-      !nextWindowIsAlsoGoodWeather
-    ) {
-      effectiveWindowEndTime = phase.EndTime + 1;
-    }
+
+    const CollectableWindowEndOffset = getEndOffset({
+      phaseStartHour: phase.StartTime,
+      windowStartHour: log.Window.StartTime,
+      windowEndHour: log.Window.EndTime,
+      nextWeatherPhaseIsGood: log.Weather.some(
+        (allowedWeather) =>
+          allowedWeather ===
+          eWeather.getWeather(startOfWeatherWindowDate + EIGHT_HOURS)
+      ),
+    });
+
     const CollectableWindowEndTime = new Date(
-      CollectableWindowStartTime.getTime() +
-        (effectiveWindowEndTime - effectiveWindowStartTime) * ONE_HOUR
+      startOfWeatherWindow + CollectableWindowEndOffset * ONE_HOUR
     );
     if (new Date(currentTime) > CollectableWindowEndTime) continue;
     return {
