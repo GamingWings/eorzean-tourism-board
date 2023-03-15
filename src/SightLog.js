@@ -22,9 +22,9 @@ const timesIntersect = (Range1, Range2) => {
   return Range1.StartTime < Range2.EndTime && Range1.EndTime > Range2.StartTime;
 };
 
-const getStartOfDay = (date) => {
+const getStartOfPhase = (date) => {
   const msec = date.getTime();
-  const bell = (msec / ONE_HOUR) % 24;
+  const bell = (msec / ONE_HOUR) % 8;
   return msec - Math.round(ONE_HOUR * bell);
 };
 
@@ -48,7 +48,6 @@ export const getEndOffset = ({
   if (windowStartHour > windowEndHour) {
     return getEndOffsetOverMidnight({
       phaseStartHour,
-      windowStartHour,
       windowEndHour,
       nextWeatherPhaseIsGood,
     });
@@ -63,11 +62,14 @@ export const getEndOffset = ({
 
 const getEndOffsetOverMidnight = ({
   phaseStartHour,
-  windowStartHour,
   windowEndHour,
   nextWeatherPhaseIsGood,
 }) => {
-  
+  const adjustedWindowEndHour = windowEndHour + 24
+  return (
+    (nextWeatherPhaseIsGood ? adjustedWindowEndHour : phaseStartHour + 8) -
+    phaseStartHour
+  );
 };
 
 const getWindow = ({ log, currentTime }) => {
@@ -77,7 +79,7 @@ const getWindow = ({ log, currentTime }) => {
   let startOfWeatherWindow = 0;
   while (!goodWeatherFound) {
     if (startOfWeatherWindow === 0) {
-      startOfWeatherWindow = getStartOfDay(new Date(currentTime));
+      startOfWeatherWindow = getStartOfPhase(new Date(currentTime));
     } else {
       startOfWeatherWindow += EIGHT_HOURS;
     }
@@ -102,7 +104,8 @@ const getWindow = ({ log, currentTime }) => {
     const CollectableWindowStartTime = new Date(
       startOfWeatherWindow + CollectableWindowStartOffset * ONE_HOUR
     );
-
+    
+    const currentStartOfWeatherWindow = startOfWeatherWindow;
     const CollectableWindowEndOffset = getEndOffset({
       phaseStartHour: phase.StartTime,
       windowStartHour: log.Window.StartTime,
@@ -110,7 +113,7 @@ const getWindow = ({ log, currentTime }) => {
       nextWeatherPhaseIsGood: log.Weather.some(
         (allowedWeather) =>
           allowedWeather ===
-          eWeather.getWeather(startOfWeatherWindowDate + EIGHT_HOURS)
+          eWeather.getWeather(new Date(currentStartOfWeatherWindow + EIGHT_HOURS))
       ),
     });
 
