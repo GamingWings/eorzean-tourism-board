@@ -131,6 +131,7 @@ function App() {
     [prefersDarkMode, storedTheme]
   );
 
+  const isXlUp = useMediaQuery(theme.breakpoints.up('xl'));
   useEffect(() => {
     let ret = Object.values(logs);
     if (hideSecondBatch) {
@@ -193,6 +194,7 @@ function App() {
       clearInterval(interval);
     };
   });
+  const cssStyle = isXlUp ? {'margin-left': '200px', width: 'auto'} : {}
 
   return (
     <ThemeProvider theme={theme}>
@@ -214,7 +216,7 @@ function App() {
         open={drawerOpen}
         onClose={() => setDrawerOpen((prev) => !prev)}
       />
-      <Container component="main" sx={{ mt: 10 }} >
+      <Container component="main" sx={{ mt: 10, ...cssStyle}} maxWidth={false}  >
         <Grid container spacing={2}>
           <Grid xs={12}>
             <img

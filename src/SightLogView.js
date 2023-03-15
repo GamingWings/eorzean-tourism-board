@@ -13,6 +13,19 @@ import {
 } from '@mui/material';
 import Grid from '@mui/material/Unstable_Grid2';
 import { CheckCircle, CheckCircleOutlineOutlined } from '@mui/icons-material';
+import { styled } from '@mui/system';
+
+const Test = styled('div')({
+  'grid-template-columns': 'repeat(auto-fit, minmax(90px, 1fr))',
+  'gap': '1rem',
+  display: 'grid',
+  width: '100%'
+});
+
+const ChipWrapper = styled('section')({
+  'display': 'grid',
+  'gap': '.5rem'
+})
 
 function SightLogView({
   Key,
@@ -48,36 +61,39 @@ function SightLogView({
               <Alert severity="error">{AlertMessage}</Alert>
             </Grid>
           )}
-          <Grid xs={4}>
-            <Chip
-              avatar={
-                <Avatar
-                  alt={Emote}
-                  src={`${process.env.PUBLIC_URL}/emotes/${EMOTE_MAPPING[Emote]}`}
-                />
-              }
-              label={Emote}
-            />
-          </Grid>
-          <Grid xs={4}>
-            <Chip label={`${WindowStartDisplay} - ${WindowEndDisplay}`} />
-          </Grid>
-          <Grid xs={4} container>
-            {Weather.map((condition) => (
-              <Grid xs={12} key={condition}>
-                <Chip
-                  size="small"
-                  avatar={
-                    <Avatar
-                      alt={condition}
-                      src={`${process.env.PUBLIC_URL}/weather/${WEATHER_MAPPING[condition]}`}
-                    />
-                  }
-                  label={condition}
-                />
-              </Grid>
-            ))}
-          </Grid>
+          <Test>
+            {/* <Grid xs={4} spacing={0}> */}
+              <Chip
+                size="small"
+                avatar={
+                  <Avatar
+                    alt={Emote}
+                    src={`${process.env.PUBLIC_URL}/emotes/${EMOTE_MAPPING[Emote]}`}
+                  />
+                }
+                label={Emote}
+              />
+            {/* </Grid>
+            <Grid xs={4}  spacing={0}> */}
+              <Chip label={`${WindowStartDisplay} - ${WindowEndDisplay}`}size="small" />
+            {/* </Grid>
+            <Grid xs={4} container> */}
+            <ChipWrapper >
+              {Weather.map((condition) => (
+                  <Chip
+                    size="small"
+                    avatar={
+                      <Avatar
+                        alt={condition}
+                        src={`${process.env.PUBLIC_URL}/weather/${WEATHER_MAPPING[condition]}`}
+                      />
+                    }
+                    label={condition}
+                  />
+              ))}
+              </ChipWrapper>
+            {/* </Grid> */}
+          </Test>
           <Grid xs={12}>
             {CollectableWindowStartTime == null ||
             CollectableWindowEndTime == null ? (
@@ -89,9 +105,9 @@ function SightLogView({
               </Typography>
             )}
           </Grid>
-          <Grid xs={12}>
+          {/* <Grid xs={12}>
             <Typography paragraph>{Comment}</Typography>
-          </Grid>
+          </Grid> */}
           <Grid xs={10} />
           <Grid>
             <Checkbox
