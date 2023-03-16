@@ -10,6 +10,11 @@ import {
   Chip,
   Link,
   Typography,
+  Dialog,
+  DialogContentText,
+  DialogTitle,
+  Box,
+  Button,
 } from '@mui/material';
 import Grid from '@mui/material/Unstable_Grid2';
 import { CheckCircle, CheckCircleOutlineOutlined } from '@mui/icons-material';
@@ -19,7 +24,7 @@ const Test = styled('div')({
   'grid-template-columns': 'repeat(auto-fit, minmax(90px, 1fr))',
   'gap': '1rem',
   display: 'grid',
-  width: '100%'
+  width: '100%',
 });
 
 const ChipWrapper = styled('section')({
@@ -44,6 +49,15 @@ function SightLogView({
   WindowEndDisplay,
   AlertMessage,
 }) {
+
+  const [open, setOpen] = React.useState(false);
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
   return (
     <Card>
       <CardHeader
@@ -55,7 +69,7 @@ function SightLogView({
         subheader={`${ZoneName} (${Coordinates.X}, ${Coordinates.Y})`}
       />
       <CardContent>
-        <Grid container spacing={1}>
+        <Grid container spacing={1} sx={{height: '200px', 'text-align': 'center', 'gap': '0.5rem'}}>
           {AlertMessage != null && (
             <Grid xs={12}>
               <Alert severity="error">{AlertMessage}</Alert>
@@ -105,9 +119,24 @@ function SightLogView({
               </Typography>
             )}
           </Grid>
-          {/* <Grid xs={12}>
-            <Typography paragraph>{Comment}</Typography>
-          </Grid> */}
+          <Grid xs={12}>
+            {/* <Typography paragraph>{Comment}</Typography> */}
+            <div>
+            <Button variant='text' onClick={handleClickOpen}>View Details</Button>
+            <Dialog
+              open={open}
+              keepMounted
+              onClose={handleClose}
+              aria-describedby="alert-dialog-slide-description"
+            >
+              <Box p={2}>
+              <DialogContentText>
+                <Typography paragraph>{Comment}</Typography>  
+              </DialogContentText>
+              </Box>
+            </Dialog>
+            </div>
+          </Grid>
           <Grid xs={10} />
           <Grid>
             <Checkbox

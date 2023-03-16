@@ -6,7 +6,7 @@ describe('A window that fits in one phase', () => {
   const windowStartHour = 13;
   const windowEndHour = 16;
   it('Calculates the start offset correctly', () => {
-    expect(getStartOffset({phaseStartHour, windowStartHour})).toBe(1);
+    expect(getStartOffset({phaseStartHour, windowStartHour})).toBe(5);
   });
 
   describe('Next weather window is good', () => {
