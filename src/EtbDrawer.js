@@ -13,7 +13,7 @@ import {
 } from '@mui/material';
 import { SORT_COLUMNS } from './Constants';
 
-function Menu({
+function EtbDrawer({
   searchTerm,
   onChangeSearchTerm,
   sortColumn,
@@ -81,4 +81,4 @@ function Menu({
   );
 }
 
-export default Menu;
+export default EtbDrawer;
