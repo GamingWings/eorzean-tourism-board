@@ -25,7 +25,7 @@ import useDeepCompareEffect from 'use-deep-compare-effect';
 function App() {
   const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
   const [storedTheme, setStoredTheme] = useState(
-    localStorage.getItem(LOCAL_STORAGE_THEME)
+    localStorage.getItem(LOCAL_STORAGE_THEME) ?? 'system'
   );
   const [logs, setLogs] = useState(
     Object.values(DATA).reduce(
