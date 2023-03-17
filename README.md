@@ -11,7 +11,6 @@ You can visit the live site at https://garrulousbrevity.github.io/eorzean-touris
 To use the app, clone the repository and install the dependencies:
 
 ```bash
-Copy code
 git clone https://github.com/Garrulousbrevity/eorzean-tourism-board.git
 cd eorzean-tourism-board
 npm install
