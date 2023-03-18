@@ -45,7 +45,8 @@ export const getEndOffset = ({
   windowEndHour,
   nextWeatherPhaseIsGood,
 }) => {
-  const adjustedWindowEndHour = windowStartHour > windowEndHour ? windowEndHour + 24 : windowEndHour;
+  const adjustedWindowEndHour =
+    windowStartHour > windowEndHour ? windowEndHour + 24 : windowEndHour;
   if (adjustedWindowEndHour <= phaseStartHour + 8)
     return windowEndHour - phaseStartHour;
   return (
@@ -86,7 +87,7 @@ const getWindow = ({ log, currentTime }) => {
     const CollectableWindowStartTime = new Date(
       startOfWeatherWindow + CollectableWindowStartOffset * ONE_HOUR
     );
-    
+
     const currentStartOfWeatherWindow = startOfWeatherWindow;
     const CollectableWindowEndOffset = getEndOffset({
       phaseStartHour: phase.StartTime,
@@ -95,7 +96,9 @@ const getWindow = ({ log, currentTime }) => {
       nextWeatherPhaseIsGood: log.Weather.some(
         (allowedWeather) =>
           allowedWeather ===
-          eWeather.getWeather(new Date(currentStartOfWeatherWindow + EIGHT_HOURS))
+          eWeather.getWeather(
+            new Date(currentStartOfWeatherWindow + EIGHT_HOURS)
+          )
       ),
     });
 

@@ -214,7 +214,7 @@ function App() {
         open={drawerOpen}
         onClose={() => setDrawerOpen((prev) => !prev)}
       />
-      <Container component="main" sx={{ mt: 10 }} >
+      <Container component="main" sx={{ mt: 10 }}>
         <Grid container spacing={2}>
           <Grid xs={12}>
             <img
