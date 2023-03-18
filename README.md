@@ -26,4 +26,4 @@ This app was made using `npm version 9.4.2` and `node v19.0.1`.
 
 ## Acknowledgements
 
-This app was made using [create-react-app](https://create-react-app.dev/), [gh-pages](https://www.npmjs.com/package/gh-pages), and the [eorzea-weather](https://www.npmjs.com/package/eorzea-weather) library. We'd like to thank the developers of these tools for making this project possible.
+This app was made using [create-react-app](https://create-react-app.dev/), [gh-pages](https://www.npmjs.com/package/gh-pages), and the [eorzea-weather](https://www.npmjs.com/package/eorzea-weather) library. We'd like to thank the developers of these tools for making this project possible. We'd also like to thank the community at [The FFXIV Wiki](https://ffxiv.consolegameswiki.com/) for collecting all of the sightseeing log collection information.
