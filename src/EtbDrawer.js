@@ -1,9 +1,13 @@
 import React from 'react';
 import { useTheme } from '@mui/material/styles';
-
+import GitHubIcon from '@mui/icons-material/GitHub';
 import {
+  Avatar,
+  Box,
+  Chip,
   Divider,
   Drawer,
+  Link,
   Toolbar,
   TextField,
   MenuItem,
@@ -77,6 +81,31 @@ function EtbDrawer({
           />
         }
       />
+      <Box
+        style={{
+          marginTop: 'auto',
+          marginLeft: 'auto',
+          marginRight: 'auto',
+          marginBottom: '20px',
+          paddingTop: '20px',
+        }}
+      >
+        <Link
+          href="https://github.com/Garrulousbrevity/eorzean-tourism-board"
+          target="_blank"
+          rel="noopener"
+        >
+          <Chip
+            clickable
+            avatar={
+              <Avatar alt="Github Logo">
+                <GitHubIcon />
+              </Avatar>
+            }
+            label="GitHub"
+          />
+        </Link>
+      </Box>
     </Drawer>
   );
 }
