@@ -36,6 +36,7 @@ const getTimeDisplay = (time) => {
 };
 
 export const getStartOffset = ({ phaseStartHour, windowStartHour }) => {
+  if (phaseStartHour === 0 && windowStartHour > 8) return 0;
   return Math.max(windowStartHour - phaseStartHour, 0);
 };
 
@@ -45,8 +46,29 @@ export const getEndOffset = ({
   windowEndHour,
   nextWeatherPhaseIsGood,
 }) => {
-  const adjustedWindowEndHour =
-    windowStartHour > windowEndHour ? windowEndHour + 24 : windowEndHour;
+  if (windowStartHour > windowEndHour)
+    return getEndOffsetAcrossDays({
+      phaseStartHour,
+      windowEndHour,
+      nextWeatherPhaseIsGood,
+    });
+  if (windowEndHour <= phaseStartHour + 8)
+    return windowEndHour - phaseStartHour;
+  return (
+    (nextWeatherPhaseIsGood ? windowEndHour : phaseStartHour + 8) -
+    phaseStartHour
+  );
+};
+
+const getEndOffsetAcrossDays = ({
+  phaseStartHour,
+  windowEndHour,
+  nextWeatherPhaseIsGood,
+}) => {
+  if (phaseStartHour === 0) {
+    return windowEndHour;
+  }
+  const adjustedWindowEndHour = windowEndHour + 24;
   if (adjustedWindowEndHour <= phaseStartHour + 8)
     return windowEndHour - phaseStartHour;
   return (
