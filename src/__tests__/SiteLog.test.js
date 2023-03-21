@@ -92,6 +92,9 @@ describe('A window across two phases across two days', () => {
         getStartOffset({ phaseStartHour: phaseStartHour + 8, windowStartHour })
       ).toBe(0);
     });
+    it('Calculates the start offset correctly when checking the first phase of the second day', () => {
+      expect(getStartOffset({ phaseStartHour: 0, windowStartHour })).toBe(0);
+    });
   });
 
   describe('Next weather window is good', () => {
@@ -105,6 +108,16 @@ describe('A window across two phases across two days', () => {
         })
       ).toBe(13);
     });
+    it('Calculates the end offset correctly when starting on the second phase, ignoring the next phase weather', () => {
+      expect(
+        getEndOffset({
+          phaseStartHour: 0,
+          windowStartHour,
+          windowEndHour,
+          nextWeatherPhaseIsGood: true,
+        })
+      ).toBe(5);
+    });
   });
   describe('Next weather window is not good', () => {
     it('Calculates the end offset correctly', () => {
@@ -116,6 +129,16 @@ describe('A window across two phases across two days', () => {
           nextWeatherPhaseIsGood: false,
         })
       ).toBe(8);
+    });
+    it('Calculates the end offset correctly when starting on the second phase, ignoring the next phase weather', () => {
+      expect(
+        getEndOffset({
+          phaseStartHour: 0,
+          windowStartHour,
+          windowEndHour,
+          nextWeatherPhaseIsGood: false,
+        })
+      ).toBe(5);
     });
   });
 });
