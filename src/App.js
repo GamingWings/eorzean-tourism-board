@@ -224,7 +224,6 @@ function App() {
               className="headerImage"
               src={`${process.env.PUBLIC_URL}/greetings-from-eorzea.png`}
               alt="Greetings from Eorzea header"
-              style={{ 'max-height': '470px', 'max-width': '1000px' }}
             />
           </Grid>
           {sortedLogs.map((log) => (
