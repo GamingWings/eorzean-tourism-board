@@ -1,0 +1,1 @@
+{"version":3,"file":"static/css/main.7a780a86.css","mappings":"AAAA,aAEE,gBAAiB,CACjB,eAAgB,CAFhB,UAGF","sources":["App.css"],"sourcesContent":[".headerImage {\n  width:100%;\n  max-width: 1000px;\n  min-height: auto;\n}\n"],"names":[],"sourceRoot":""}
