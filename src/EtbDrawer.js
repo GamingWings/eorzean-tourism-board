@@ -16,6 +16,13 @@ import {
   useMediaQuery,
 } from '@mui/material';
 import { SORT_COLUMNS } from './Constants';
+import { styled } from '@mui/system';
+
+const FilterContent = styled('section')`
+  display: grid;
+  gap: 1rem;
+  padding: 0 10px;
+`;
 
 function EtbDrawer({
   searchTerm,
@@ -28,6 +35,7 @@ function EtbDrawer({
   onChangeFilterSecondBatch,
   open,
   onClose,
+  numberFound,
 }) {
   const theme = useTheme();
   const isXlUp = useMediaQuery(theme.breakpoints.up('xl'));
@@ -39,48 +47,52 @@ function EtbDrawer({
       open={open}
       onClose={onClose}
     >
-      <Toolbar />
-      <Divider />
-      <TextField
-        label="Search"
-        type="search"
-        value={searchTerm}
-        onChange={({ target: { value } }) => onChangeSearchTerm(value)}
-      />
+      <FilterContent>
+        <Toolbar>{`${numberFound} / 80 Collected`}</Toolbar>
+        <Divider />
+        <TextField
+          label="Search"
+          type="search"
+          value={searchTerm}
+          onChange={({ target: { value } }) => onChangeSearchTerm(value)}
+        />
 
-      <TextField
-        select
-        label="Sort By"
-        value={sortColumn}
-        onChange={({ target: { value } }) => onChangeSortColumn(value)}
-      >
-        {SORT_COLUMNS.map((option) => (
-          <MenuItem key={option} value={option}>
-            {option}
-          </MenuItem>
-        ))}
-      </TextField>
+        <TextField
+          select
+          label="Sort By"
+          value={sortColumn}
+          onChange={({ target: { value } }) => onChangeSortColumn(value)}
+        >
+          {SORT_COLUMNS.map((option) => (
+            <MenuItem key={option} value={option}>
+              {option}
+            </MenuItem>
+          ))}
+        </TextField>
 
-      <FormControlLabel
-        label="Hide Collected"
-        control={
-          <Checkbox
-            checked={filterFound}
-            onChange={({ target: { checked } }) => onChangeFilterFound(checked)}
-          />
-        }
-      />
-      <FormControlLabel
-        label="Hide Second Batch"
-        control={
-          <Checkbox
-            checked={filterSecondBatch}
-            onChange={({ target: { checked } }) =>
-              onChangeFilterSecondBatch(checked)
-            }
-          />
-        }
-      />
+        <FormControlLabel
+          label="Hide Collected"
+          control={
+            <Checkbox
+              checked={filterFound}
+              onChange={({ target: { checked } }) =>
+                onChangeFilterFound(checked)
+              }
+            />
+          }
+        />
+        <FormControlLabel
+          label="Hide Second Batch"
+          control={
+            <Checkbox
+              checked={filterSecondBatch}
+              onChange={({ target: { checked } }) =>
+                onChangeFilterSecondBatch(checked)
+              }
+            />
+          }
+        />
+      </FilterContent>
       <Box
         style={{
           marginTop: 'auto',

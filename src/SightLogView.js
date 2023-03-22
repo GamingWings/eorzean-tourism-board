@@ -1,5 +1,5 @@
 import React from 'react';
-import { WEATHER_MAPPING, EMOTE_MAPPING } from './Constants';
+import { WEATHER_MAPPING, EMOTE_MAPPING, DAY_MILLISECONDS } from './Constants';
 import {
   Alert,
   Avatar,
@@ -10,9 +10,114 @@ import {
   Chip,
   Link,
   Typography,
+  Dialog,
+  Box,
+  Button,
+  FormControlLabel,
+  FormGroup,
 } from '@mui/material';
 import Grid from '@mui/material/Unstable_Grid2';
 import { CheckCircle, CheckCircleOutlineOutlined } from '@mui/icons-material';
+import { styled } from '@mui/system';
+
+const SiteLogContent = styled('section')({
+  gridTemplateColumns: 'repeat(auto-fit, minmax(90px, 1fr))',
+  gap: '1rem',
+  display: 'grid',
+  width: '100%',
+});
+
+const ChipWrapper = styled('section')({
+  display: 'grid',
+  gap: '.5rem',
+  height: '60px',
+});
+
+const ViewDetailsButton = (props) => {
+  const [open, setOpen] = React.useState(false);
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  return (
+    <Grid xs={12}>
+      <div>
+        <Button variant="text" onClick={handleClickOpen}>
+          View Details
+        </Button>
+        <Dialog
+          open={open}
+          keepMounted
+          onClose={handleClose}
+          aria-describedby="alert-dialog-slide-description"
+        >
+          <Box p={2}>
+            <SightLogView {...props} showMoreInfo />
+          </Box>
+        </Dialog>
+      </div>
+    </Grid>
+  );
+};
+
+const SiteLogViewWrapper = (props) => {
+  return (
+    <SightLogView {...props} interactable={<ViewDetailsButton {...props} />} />
+  );
+};
+
+const DefaultTimeFormat = {
+  hour: 'numeric',
+  minute: 'numeric',
+};
+
+const DefaultDateFormat = {
+  day: 'numeric',
+  year: 'numeric',
+  month: 'numeric',
+};
+
+const DateDisplay = ({
+  CollectableWindowStartTime,
+  CollectableWindowEndTime,
+  currentTime,
+}) => {
+  const isGreaterTwentyFourHours =
+    new Date(CollectableWindowStartTime).getTime() >
+    currentTime + 1000 * 60 * 60;
+
+  const startTimeFormat = isGreaterTwentyFourHours
+    ? { ...DefaultTimeFormat, ...DefaultDateFormat }
+    : DefaultTimeFormat;
+  const startTime = CollectableWindowStartTime
+    ? CollectableWindowStartTime.toLocaleTimeString(
+        [],
+        startTimeFormat
+      ).replace(',', '')
+    : '';
+
+  return (
+    <Grid xs={12} sx={{ marginTop: '10px' }}>
+      {CollectableWindowStartTime == null ||
+      CollectableWindowEndTime == null ? (
+        <Typography variant="h4">N/A</Typography>
+      ) : (
+        <Typography variant="h6">
+          {startTime}
+          {!isGreaterTwentyFourHours &&
+            ` - ${CollectableWindowEndTime.toLocaleTimeString(
+              [],
+              DefaultTimeFormat
+            )}`}
+        </Typography>
+      )}
+    </Grid>
+  );
+};
 
 function SightLogView({
   Key,
@@ -21,7 +126,6 @@ function SightLogView({
   Coordinates,
   Weather,
   Emote,
-  Comment,
   URL,
   IsFound,
   onChangeMarkAsFound,
@@ -30,6 +134,10 @@ function SightLogView({
   WindowStartDisplay,
   WindowEndDisplay,
   AlertMessage,
+  currentTime,
+  interactable = <></>,
+  Comment = null,
+  showMoreInfo = false,
 }) {
   return (
     <Card>
@@ -39,17 +147,26 @@ function SightLogView({
             {Key}. {Name}
           </Link>
         }
-        subheader={`${ZoneName} (${Coordinates.X}, ${Coordinates.Y})`}
+        subheader={`${ZoneName} (${Object.values(Coordinates).join(', ')})`}
       />
       <CardContent>
-        <Grid container spacing={1}>
+        <Grid
+          container
+          spacing={1}
+          sx={{
+            height: showMoreInfo ? 'auto' : '220px',
+            textAlign: 'center',
+            gap: '0.5rem',
+          }}
+        >
           {AlertMessage != null && (
             <Grid xs={12}>
               <Alert severity="error">{AlertMessage}</Alert>
             </Grid>
           )}
-          <Grid xs={4}>
+          <SiteLogContent>
             <Chip
+              size="small"
               avatar={
                 <Avatar
                   alt={Emote}
@@ -58,14 +175,14 @@ function SightLogView({
               }
               label={Emote}
             />
-          </Grid>
-          <Grid xs={4}>
-            <Chip label={`${WindowStartDisplay} - ${WindowEndDisplay}`} />
-          </Grid>
-          <Grid xs={4} container>
-            {Weather.map((condition) => (
-              <Grid xs={12} key={condition}>
+            <Chip
+              label={`${WindowStartDisplay} - ${WindowEndDisplay}`}
+              size="small"
+            />
+            <ChipWrapper>
+              {Weather.map((condition) => (
                 <Chip
+                  key={condition}
                   size="small"
                   avatar={
                     <Avatar
@@ -75,33 +192,37 @@ function SightLogView({
                   }
                   label={condition}
                 />
-              </Grid>
-            ))}
-          </Grid>
+              ))}
+            </ChipWrapper>
+          </SiteLogContent>
+          <DateDisplay
+            CollectableWindowStartTime={CollectableWindowStartTime}
+            CollectableWindowEndTime={CollectableWindowEndTime}
+            currentTime={currentTime}
+          />
+          {showMoreInfo && (
+            <Grid xs={12}>
+              <Typography>{Comment}</Typography>
+            </Grid>
+          )}
+          {interactable}
           <Grid xs={12}>
-            {CollectableWindowStartTime == null ||
-            CollectableWindowEndTime == null ? (
-              <Typography variant="h4">N/A</Typography>
-            ) : (
-              <Typography variant="h6">
-                Available: {CollectableWindowStartTime.toLocaleTimeString()} -{' '}
-                {CollectableWindowEndTime.toLocaleTimeString()}
-              </Typography>
-            )}
-          </Grid>
-          <Grid xs={12}>
-            <Typography paragraph>{Comment}</Typography>
-          </Grid>
-          <Grid xs={10} />
-          <Grid>
-            <Checkbox
-              icon={<CheckCircleOutlineOutlined />}
-              checkedIcon={<CheckCircle />}
-              checked={IsFound}
-              onChange={({ target: { checked } }) =>
-                onChangeMarkAsFound({ Key, IsFound: checked })
-              }
-            />
+            <FormGroup sx={{ textAlignItems: 'end' }}>
+              <FormControlLabel
+                labelPlacement="start"
+                control={
+                  <Checkbox
+                    icon={<CheckCircleOutlineOutlined />}
+                    checkedIcon={<CheckCircle />}
+                    checked={IsFound}
+                    onChange={({ target: { checked } }) =>
+                      onChangeMarkAsFound({ Key, IsFound: checked })
+                    }
+                  />
+                }
+                label="Collected"
+              />
+            </FormGroup>
           </Grid>
         </Grid>
       </CardContent>
@@ -109,4 +230,4 @@ function SightLogView({
   );
 }
 
-export default SightLogView;
+export default SiteLogViewWrapper;
