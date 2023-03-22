@@ -103,7 +103,7 @@ function EtbDrawer({
         }}
       >
         <Link
-          href="https://github.com/Garrulousbrevity/eorzean-tourism-board"
+          href="https://github.com/GamingWings/eorzean-tourism-board"
           target="_blank"
           rel="noopener"
         >
