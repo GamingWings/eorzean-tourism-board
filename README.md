@@ -7,14 +7,14 @@ Welcome to the Eorzean Tourism Board!
 
 The Eorzean Tourism Board is a website that allows users to look up information about the various sightseeing logs available in the MMORPG Final Fantasy XIV.
 
-You can visit the live site at https://garrulousbrevity.github.io/eorzean-tourism-board/.
+You can visit the live site at https://gamingwings.github.io/eorzean-tourism-board/.
 
 ## Installation
 
 To use the app, clone the repository and install the dependencies:
 
 ```bash
-git clone https://github.com/Garrulousbrevity/eorzean-tourism-board.git
+git clone https://github.com/GamingWings/eorzean-tourism-board.git
 cd eorzean-tourism-board
 npm install
 npm start

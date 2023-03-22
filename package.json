@@ -2,7 +2,7 @@
   "name": "sight_seer",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://garrulousbrevity.github.io/eorzean-tourism-board/",
+  "homepage": "https://gamingwings.github.io/eorzean-tourism-board/",
   "dependencies": {
     "@emotion/react": "^11.10.6",
     "@emotion/styled": "^11.10.6",
