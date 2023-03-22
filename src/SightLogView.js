@@ -88,7 +88,7 @@ const DateDisplay = ({
 }) => {
   const isGreaterTwentyFourHours =
     new Date(CollectableWindowStartTime).getTime() >
-    currentTime + 1000 * 60 * 60;
+    currentTime + DAY_MILLISECONDS;
 
   const startTimeFormat = isGreaterTwentyFourHours
     ? { ...DefaultTimeFormat, ...DefaultDateFormat }
