@@ -50,9 +50,10 @@ export const SORT_COLUMNS = [
   SORT_COLUMN_END,
 ];
 
-export const ONE_HOUR = 175 * 1000;
-export const EIGHT_HOURS = ONE_HOUR * 8;
-export const ONE_DAY = EIGHT_HOURS * 3;
+export const ONE_BELL = 175 * 1000;
+export const EIGHT_BELLS = ONE_BELL * 8;
+export const TWENTY_FOUR_BELLS = EIGHT_BELLS * 3;
+export const DAY_MILLISECONDS = 1000 * 60 * 60 * 24;
 
 export const LOCAL_STORAGE_KEY_SORT_COLUMN = 'LocalStorage';
 export const LOCAL_STORAGE_KEY_SEARCH_TERM = 'SearchTerm';

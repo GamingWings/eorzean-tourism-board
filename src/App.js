@@ -109,9 +109,9 @@ function App() {
     setHideSecondBatch(value);
   };
 
-  // const numberFound = useMemo(() => {
-  //   return Object.values(logs).filter(({isFound}) => isFound).length
-  // }, [logs])
+  const numberFound = useMemo(() => {
+    return Object.values(logs).filter(({ IsFound }) => IsFound).length;
+  }, [logs]);
 
   const theme = useMemo(
     () =>
@@ -194,7 +194,7 @@ function App() {
       clearInterval(interval);
     };
   });
-  const cssStyle = isXlUp ? {'margin-left': '200px', width: 'auto'} : {}
+  const cssStyle = isXlUp ? { marginLeft: '230px', width: 'auto' } : {};
 
   return (
     <ThemeProvider theme={theme}>
@@ -215,14 +215,16 @@ function App() {
         onChangeFilterSecondBatch={handleChangeHideSecondBatch}
         open={drawerOpen}
         onClose={() => setDrawerOpen((prev) => !prev)}
+        numberFound={numberFound}
       />
-      <Container component="main" sx={{ mt: 10, ...cssStyle}} maxWidth={false}  >
+      <Container component="main" sx={{ mt: 10, ...cssStyle }} maxWidth={false}>
         <Grid container spacing={2}>
-          <Grid xs={12}>
+          <Grid xs={12} sx={{ textAlign: 'center' }}>
             <img
               className="headerImage"
               src={`${process.env.PUBLIC_URL}/greetings-from-eorzea.png`}
               alt="Greetings from Eorzea header"
+              style={{ 'max-height': '470px', 'max-width': '1000px' }}
             />
           </Grid>
           {sortedLogs.map((log) => (

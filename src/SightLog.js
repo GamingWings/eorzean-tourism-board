@@ -1,7 +1,7 @@
 import React from 'react';
 import EorzeaWeather from 'eorzea-weather';
 import EorzeaTime from 'eorzea-time';
-import { EIGHT_HOURS, ONE_HOUR, PHASES } from './Constants';
+import { EIGHT_BELLS, ONE_BELL, PHASES } from './Constants';
 import { useState, useEffect } from 'react';
 import SightLogView from './SightLogView';
 import useDeepCompareEffect from 'use-deep-compare-effect';
@@ -24,8 +24,8 @@ const timesIntersect = (Range1, Range2) => {
 
 const getStartOfPhase = (date) => {
   const msec = date.getTime();
-  const bell = (msec / ONE_HOUR) % 8;
-  return msec - Math.round(ONE_HOUR * bell);
+  const bell = (msec / ONE_BELL) % 8;
+  return msec - Math.round(ONE_BELL * bell);
 };
 
 const getTimeDisplay = (time) => {
@@ -86,7 +86,7 @@ const getWindow = ({ log, currentTime }) => {
     if (startOfWeatherWindow === 0) {
       startOfWeatherWindow = getStartOfPhase(new Date(currentTime));
     } else {
-      startOfWeatherWindow += EIGHT_HOURS;
+      startOfWeatherWindow += EIGHT_BELLS;
     }
     const startOfWeatherWindowDate = new Date(startOfWeatherWindow);
     const phase = phases.find(
@@ -107,7 +107,7 @@ const getWindow = ({ log, currentTime }) => {
     });
 
     const CollectableWindowStartTime = new Date(
-      startOfWeatherWindow + CollectableWindowStartOffset * ONE_HOUR
+      startOfWeatherWindow + CollectableWindowStartOffset * ONE_BELL
     );
 
     const currentStartOfWeatherWindow = startOfWeatherWindow;
@@ -119,13 +119,13 @@ const getWindow = ({ log, currentTime }) => {
         (allowedWeather) =>
           allowedWeather ===
           eWeather.getWeather(
-            new Date(currentStartOfWeatherWindow + EIGHT_HOURS)
+            new Date(currentStartOfWeatherWindow + EIGHT_BELLS)
           )
       ),
     });
 
     const CollectableWindowEndTime = new Date(
-      startOfWeatherWindow + CollectableWindowEndOffset * ONE_HOUR
+      startOfWeatherWindow + CollectableWindowEndOffset * ONE_BELL
     );
     if (new Date(currentTime) > CollectableWindowEndTime) continue;
     return {
@@ -178,6 +178,7 @@ function SightLog({
       WindowEndDisplay={windowEndDisplay}
       AlertMessage={alert}
       onChangeMarkAsFound={onChangeMarkAsFound}
+      currentTime={currentTime}
     />
   );
 }
